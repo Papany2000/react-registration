@@ -1,23 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import { Route, Routes } from "react-router-dom";
+import "./App.css";
+import AppLayout from "./Components/Page/appLayout";
+import Home from "./Components/Page/home";
+import Admin from "./Components/Page/admin";
+import React from "react";
+import { UserContext } from "./Components/context/contextAuth";
+
 
 function App() {
+
+  const [auth, setAuth] = React.useState(false);
+  React.useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      setAuth(true);
+    } else {
+      setAuth(false)
+    }
+  }, [auth]);
+  const value = { auth, setAuth };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <UserContext.Provider value={value}>
+      <Routes>
+        <Route path="/" element={<AppLayout />}>
+          <Route index element={<Home />} />
+          <Route path="registration" element={<Admin />} />
+        </Route>
+      </Routes>
+      </UserContext.Provider>
     </div>
   );
 }
