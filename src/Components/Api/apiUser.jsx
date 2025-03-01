@@ -24,20 +24,25 @@ export const getUserInfo = async () => {
 
 // Выход из системы (logout) - удаление refreshToken на сервере
 export const logout = async () => {
-  try {
-    const refreshToken = localStorage.getItem('refresh_token');
-    if (!refreshToken) {
-      throw new Error('Токен не найден');
+  if (window.confirm('Вы уверены, что хотите выйти из системы?')) {
+    try {
+      const refreshToken = localStorage.getItem('refresh_token');
+      if (!refreshToken) {
+        throw new Error('Токен не найден');
+      }
+      await axiosClient.post('/auth/logout', { refreshToken });
+      // Очистка данных
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      // Перенаправление после успеха 
+     // window.location.href = '/registration';
+    } catch (error) {
+      console.error('Ошибка:', error.response?.data?.message || error.message);
+      // Можно показать уведомление пользователю
+      alert('Не удалось выйти. Попробуйте ещё раз.');
     }
-    await axiosClient.post('/auth/logout', { refreshToken });
-    // Очистка данных
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    // Перенаправление после успеха
-    window.location.href = '/registration';
-  } catch (error) {
-    console.error('Ошибка:', error.response?.data?.message || error.message);
-    // Можно показать уведомление пользователю
-    alert('Не удалось выйти. Попробуйте ещё раз.');
+  } else {
+    // Пользователь отменил выход
+    console.log('Выход отменен пользователем');
   }
 };

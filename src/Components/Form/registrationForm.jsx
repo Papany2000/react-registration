@@ -8,15 +8,15 @@ import { UserContext } from '../context/contextAuth';
 const RegistrationForm = ({ closeModal }) => {
 
     const { registerUser, loading, error } = useRegistration(); // Используем хук
-    const { setAuth } = React.useContext(UserContext); // Используем контекст
+    const { setAuth, setSrc } = React.useContext(UserContext); // Используем контекст
     const { handleSubmit, register, formState: { errors } } = useForm();
 
 
     const onSubmit = async (data) => {
         const res = await registerUser(data); // Используем функцию регистрации из хука
-
         if (res) {
             // Обрабатываем успешную регистрацию
+            setSrc(res.data.newUser.avatarUrl);
             setAuth(true);
             localStorage.setItem('access_token', res.data.accessToken); //  Сохраняем access_token
             localStorage.setItem('refresh_token', res.data.refreshToken); //  Сохраняем refresh_token
@@ -74,6 +74,23 @@ const RegistrationForm = ({ closeModal }) => {
                     className={errors.password ? 'form-control error' : 'form-control'}
                 />
                 {errors.password && <span className="error-message">{errors.password.message}</span>}
+            </div>
+
+            <div className="form-group">
+                <label htmlFor="avatarUrl">Avatar URL:</label>
+                <input
+                    type="text"
+                    id="avatarUrl"
+                    {...register('avatarUrl', {
+                        required: 'avatarUrl обязателен для заполнения',
+                        pattern: {
+                            value: /^(https?:\/\/)?(localhost|127\.0\.0\.1)(:\d+)?\/video\/\d+\.mp4$/,
+                            message: 'Неверный формат avatarUrl',
+                        },
+                    })}
+                    className={errors.email ? 'form-control error' : 'form-control'}
+                />
+                {errors.avatarUrl && <span className="error-message">{errors.avatarUrl.message}</span>}
             </div>
 
             <button type="submit" className="submit-button" disabled={loading}>

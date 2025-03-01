@@ -3,12 +3,13 @@ import "./App.css";
 import AppLayout from "./Components/Page/appLayout";
 import Home from "./Components/Page/home";
 import Admin from "./Components/Page/admin";
-import React from "react";
+import React, { useState } from "react";
 import { UserContext } from "./Components/context/contextAuth";
 
 
 function App() {
 
+  const [src, setSrc] = useState('');
   const [auth, setAuth] = React.useState(false);
   React.useEffect(() => {
     const token = localStorage.getItem('access_token');
@@ -18,7 +19,7 @@ function App() {
       setAuth(false)
     }
   }, [auth]);
-  const value = { auth, setAuth };
+  const value = { auth, setAuth, src, setSrc };
   return (
     <div className="App">
       <UserContext.Provider value={value}>

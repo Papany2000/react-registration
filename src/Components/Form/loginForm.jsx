@@ -8,7 +8,7 @@ import useLogin from '../hook/userlogin';
 const LoginForm = ({ closeModal }) => {
 
     const { loginUser, loading, error } = useLogin(); // Используем хук
-    const { setAuth } = React.useContext(UserContext); // Используем контекст
+    const { setAuth, setSrc } = React.useContext(UserContext); // Используем контекст
     const { handleSubmit, register, formState: { errors } } = useForm();
    
 
@@ -17,6 +17,7 @@ const LoginForm = ({ closeModal }) => {
         const res = await loginUser(data); // Используем функцию регистрации из хука
         if (res) {
             // Обрабатываем успешную регистрацию
+            setSrc(res.data.newUser.avatarUrl);
             setAuth(true);
             localStorage.setItem('access_token', res.data.accessToken); //  Сохраняем access_token
             localStorage.setItem('refresh_token', res.data.refreshToken); //  Сохраняем refresh_token
@@ -27,7 +28,7 @@ const LoginForm = ({ closeModal }) => {
                 timer: 2000,
                 showConfirmButton: false
             });
-           // closeModal();
+            closeModal();
         } else {
             // Обрабатываем ошибку
             Swal.fire({

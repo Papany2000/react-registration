@@ -21,11 +21,11 @@ function Admin() {
     return (
         <div>
             <div className={'divbutton'}>
-                <button onClick={() => openModal("Введите свои данные", <RegistrationForm closeModal={closeModal} />)}>регистрация пользователя</button>
+                <button onClick={() => openModal("Введите свои данные", <RegistrationForm closeModal={closeModal} />)}>регистрация и вход</button>
                 <button onClick={logout}>Выход</button>
-                <button onClick={() => openModal("Введите свои данные", <LoginForm closeModal={closeModal} />)}>Вход на сайт</button>
+                <button onClick={() => openModal("Введите свои данные", <LoginForm closeModal={closeModal} />)}>Вход</button>
             </div>    
-            <h2>Форма регистрации пользователя</h2>
+            <h2>Admin страница</h2>
             <Modal isOpen={isModalOpen}
                 title={modalContent.title}
                 onClose={closeModal}>
